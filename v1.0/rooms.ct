@@ -1,0 +1,43 @@
+﻿/***************************************
+
+                |\___/|
+               ( O . O )
+                |     |
+                | U U |
+               с|__э__э
+
+                  ct
+
+           [ rooms cotomod ]
+
+               это котэ
+          он есть, но его нет
+        и он делает магию в html5
+
+***************************************/
+
+ct.rooms = {};
+ct.rooms.make = function () {
+  for (i in this.objs) {
+    ct.types.make(this.objs[i].type,this.objs[i].x,this.objs[i].y);
+  };
+};
+ct.rooms.switch = function (room) {
+  for (i in ct.layers) {
+    ct.layers[i] = [];
+  };
+  ct.layers = [];
+  ct.types.list = { };
+  ct.rooms.current = ct.rooms[room];
+  ct.rooms.make.apply(ct.rooms.current);
+  ct.setAttribute('width', ct.rooms.current.width);
+  ct.setAttribute('height', ct.rooms.current.height);
+  ct.rooms.current.onstart();
+};
+ct.rooms.starting = 'menu';  
+
+/********************** комнаты **************************/
+
+/*  */
+
+ct.libs += ' rooms';

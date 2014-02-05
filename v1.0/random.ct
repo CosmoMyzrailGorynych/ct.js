@@ -1,0 +1,42 @@
+﻿/***************************************
+
+                |\___/|
+               ( O . O )
+                |     |
+                | U U |
+               с|__э__э
+
+                  ct
+
+          [ random cotomod ]
+
+               это котэ
+          он есть, но его нет
+        и он делает магию в html5
+
+***************************************/
+
+ct.random = {
+  'dice': function () {
+    return arguments[Math.floor(Math.random() * arguments.length)];
+  },
+  'range': function (x1,x2) {
+    if (x2) {
+      return x1+Math.floor(Math.random() * (x2-x1));
+    } else {
+      return Math.floor(Math.random()*x1);
+    }
+  },
+  'deg': function () {
+    return Math.random()*360;
+  },
+  'coord': function () {
+    return [Math.floor(Math.random()*ct.width),Math.floor(Math.random()*ct.height)];
+  },
+  'chance': function (x,y) {
+    if (y) return (Math.random()*y < x);
+    else return (Math.random()*100 < x);
+  },
+};
+
+ct.libs += ' random';

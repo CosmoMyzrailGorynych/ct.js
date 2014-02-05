@@ -1,0 +1,113 @@
+﻿/***************************************
+
+                |\___/|
+               ( O . O )
+                |     |
+                | U U |
+               с|__э__э
+
+                  ct
+
+            [ main cotomod ]
+
+               это котэ
+          он есть, но его нет
+        и он делает магию в html5
+
+***************************************/
+
+ct = document.createElement("canvas");
+document.getElementById('ct').appendChild(ct);
+ct.setAttribute('id', 'ctcanvas');
+ct.setAttribute('width', 640);
+ct.setAttribute('height', 480);
+ct.x = ct.getContext("2d");
+
+ct.libs = 'main';
+
+ct.speed = 30;
+ct.layers = [];
+ct.types = {};
+ct.graphs = {};
+ct.snd = {};
+
+ct.load = function (url,callback) { // ф-ия для подгрузки библиотек .ct (и вообще любых скриптов, только тссс!)
+  var script = document.createElement('script');
+  script.src = url;
+  if (callback) { 
+    script.onload = callback;
+  }
+  document.getElementsByTagName('head')[0].appendChild(script);
+};
+ct.pi = 0;
+ct.loop = function () {
+  if (ct.res) if (ct.res.graphloaded + ct.res.sndloaded < ct.res.graphtotal + ct.res.sndtotal) {
+    ct.x.clearRect(0, 0, ct.width, ct.height);
+    ct.x.strokeStyle = '#ffffff';
+    ct.x.globalAlpha = 1;
+    ct.x.font = '16px verdana, sans-serif';
+    ct.x.fillStyle = '#ffffff';
+    ct.x.shadowBlur = 8;
+    ct.x.shadowColor = 'rgba(0,0,0,1)';
+    ct.x.shadowOffsetX = 0;
+    ct.x.shadowOffsetY = 0;
+    ct.x.lineWidth = 3;
+    ct.x.textBaseline = 'middle';
+    ct.x.textAlign = 'center';
+    ct.x.beginPath();
+    ct.pi += 0.15;
+    ct.x.arc(ct.width / 2,ct.height / 2,64,ct.pi,0.5*Math.PI + ct.pi);
+    ct.x.stroke();
+    ct.x.fillText('Грузимся!',ct.width / 2,ct.height / 2 - 15);
+    ct.x.font = '28px verdana, sans-serif';
+    ct.x.fillText(Math.floor((ct.res.graphloaded + ct.res.sndloaded) / (ct.res.graphtotal + ct.res.sndtotal) * 100) + '%',ct.width / 2,ct.height / 2 + 15);
+  } else {
+    ct.rooms.switch(ct.rooms.starting)
+    ct.loop = function () {
+      ct.x.clearRect(0, 0, ct.width, ct.height);
+      for (i in ct.layers) {
+        for (k in ct.layers[i]) {
+          if (ct.layers[i][k].kill) ct.layers[i].splice(k,1);
+          else ct.layers[i][k].events();
+        }
+      }
+      for (i in ct.types.list) {
+        for (k in ct.types.list[i]) {
+          if (ct.types.list[i][k].kill) ct.types.list[i].splice(k,1);
+        }
+      }
+      ct.rooms.current.events();
+      if (ct.mouse) {
+        ct.mouse.clear();
+        ct.mouse.xprevious = ct.mouse.x;
+        ct.mouse.yprevious = ct.mouse.y;
+      }
+      if (ct.keyboard) ct.keyboard.clear();
+    }
+  }
+};
+ct.ldx=function(l,d){return l*Math.cos(d*Math.PI/-180);};
+ct.ldy=function(l,d){return l*Math.sin(d*Math.PI/-180);};
+ct.pdn=function(x1,y1,x2,y2){return (Math.atan2(y2-y1,x2-x1)*-180/Math.PI+360)%360;};
+ct.pdc=function(x1,y1,x2,y2){return Math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));};
+
+ct.interval = setInterval('ct.loop()',1000/ct.speed);
+
+ct.newspeed = function(fps) {
+  if(fps == ct.speed) return;
+  clearInterval(ct.interval);
+  ct.interval = setInterval('ct.loop();',1000/fps);
+  ct.speed = fps;
+};
+
+ct.load('rooms.ct');
+ct.load('types.ct');
+ct.load('draw.ct');
+ct.load('res.ct');
+ct.load('sound.ct');
+ct.load('place.ct');
+ct.load('background.ct');
+ct.load('mouse.ct');
+ct.load('keyboard.ct');
+ct.load('random.ct');
+ct.load('styles.ct');

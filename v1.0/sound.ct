@@ -1,0 +1,76 @@
+﻿/***************************************
+
+                |\___/|
+               ( O . O )
+                |     |
+                | U U |
+               с|__э__э
+
+                  ct
+
+           [ sound cotomod ]
+
+               это котэ
+          он есть, но его нет
+        и он делает магию в html5
+
+***************************************/
+
+ct.sound = {
+  'detect': function (_type){
+    var _au = document.createElement('audio');
+    return !!(_au.canPlayType && _au.canPlayType(_type).replace(/no/, ''));
+  },
+  'init':  function(name, wav, mp3, ogg, callback) {
+    var src = '';
+    var sound = {'type': 'none'};
+    
+    if (ct.sound.ogg && (ogg != undefined && ogg != '')) {
+      sound.type = 'ogg';
+      src = ogg;
+    } else if (ct.sound.mp3 && (mp3 != undefined && mp3 != '')) {
+     sound.type = 'mp3';
+     src = mp3;
+    } else if (ct.sound.wav && (wav != undefined && wav != '')) {
+      sound.type = 'wav';
+      src = wav;
+    }
+    if (src != '') {
+      sound.audio = document.createElement('audio');      
+      ct.res.sndloaded ++;
+      sound.audio.setAttribute('src', src);
+      sound.audio.style.display = 'none';
+      document.body.appendChild(sound.audio);
+    } else {
+      ct.res.sndloaded ++;
+    }
+    ct.snd[name] = sound.audio;
+  },
+  'play': function (name) {
+    ct.snd[name].loop = false;
+    ct.snd[name].play();
+  },
+  'loop': function (name) {
+    ct.snd[name].loop = true  ;
+    ct.snd[name].play();
+  },
+  'pause': function (name) {
+    ct.snd[name].pause();
+  },
+  'volume': function (name,power) {
+    if(power == undefined) return ct.snd[name].volume;
+    return ct.snd[name].volume = power;
+  },
+  'time': function (name,time) {
+    if(time == undefined) return ct.snd[name].currentTime;
+    return ct.snd[name].currentTime = time;
+  },
+  'duration': function (name) {
+    return ct.snd[name].duration;
+  },
+};
+ct.sound['wav'] = ct.sound.detect('audio/wav; codecs="1"'),
+ct.sound['ogg'] = ct.sound.detect('audio/ogg; codecs="vorbis"'),
+ct.sound['mp3'] = ct.sound.detect('audio/mpeg;'),
+
+ct.libs += ' sound';

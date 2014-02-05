@@ -1,0 +1,76 @@
+﻿/***************************************
+
+           [ styles cotomod ]
+
+   [ (c) Cosmo Myzrail Gorynych 2013 ]
+
+***************************************/
+
+ct.styles = {
+  'types': { },
+  'new': function (name,fill,stroke,text,shadow) {
+    var style = {
+      'lineWidth': 0,
+      'shadowColor': 'rgba(0,0,0,0)',
+      'shadowBlur': 0,
+      'shadowOffsetX': '0',
+      'shadowOffsetY': '0',
+    };
+    if (fill) {
+      if (fill.type == 'solid') {
+        style.fillStyle = fill.color;
+      } else if (fill.type == 'radgrad') {
+        var grad = ct.x.createRadialGradient(fill.r,fill.r,0,0,0,fill.r);
+        for (k in fill.colors) {
+          grad.addColorStop(fill.colors[k].pos,fill.colors[k].color);
+        };
+        style.fillStyle = grad;
+      } else if (fill.type == 'grad') {
+        var grad = ct.x.createLinearGradient(fill.x1,fill.y1,fill.x2,fill.y2);
+        for (k in fill.colors) {
+          grad.addColorStop(fill.colors[k].pos,fill.colors[k].color);
+        };
+        style.fillStyle = grad;
+      } else if (fill.type == 'pattern') {
+        style.fillStyle = ct.background.types[name];
+      }
+    }
+    if (stroke) {
+      style.strokeStyle = stroke.color;
+      style.lineWidth = stroke.width;
+    }
+    if (text) {
+      style.font = text.size + 'px ' + text.family;
+      if (text.valign) style.textBaseline = text.valign;
+      if (text.halign) style.textAlign = text.halign;
+    }
+    if (shadow) {
+      style.shadowColor = shadow.color;
+      style.shadowOffsetX = shadow.x;
+      style.shadowOffsetY = shadow.y;
+      style.shadowBlur = shadow.blur;
+    }
+    ct.styles.types[name] = style;
+    return style;
+  },
+  'set': function (name) {
+    for (k in ct.styles.types[name]) {
+      ct.x[k] = ct.styles.types[name][k];
+    }
+  },
+  'reset': function () {
+    ct.x.strokeStyle = '#000000'; // обводка
+    ct.x.globalAlpha = 1; // непрозрачность
+    ct.x.font = '12px sans-serif'; // шрифт
+    ct.x.fillStyle = '#000000'; // заливка
+    ct.x.shadowBlur = 0; // размытие тени
+    ct.x.shadowColor = 'none'; // цвет тени
+    ct.x.shadowOffsetX = 0; // смещение тени по горизонтали
+    ct.x.shadowOffsetY = 0; // смещение тени по вертикали
+    ct.x.lineWidth = 0; // толщина линий для обводки
+    ct.x.textBaseline = 'alphabet'; // способ выравнивания текста по вертикали
+    ct.x.textAlign = 'left'; 
+  }
+};
+
+ct.libs += " styles";

@@ -1,0 +1,90 @@
+﻿/***************************************
+
+                |\___/|
+               ( O . O )
+                |     |
+                | U U |
+               с|__э__э
+
+                  ct
+
+            [ res cotomod ]
+
+               это котэ
+          он есть, но его нет
+        и он делает магию в html5
+
+
+***************************************/
+
+ct.res = {};
+ct.res.graphloaded = 0; // сколько картинок загрузилось
+if (!ct.res.sndloaded) ct.res.sndloaded = 0; // сколько звуков загрузилось
+ct.res.graphtotal = 1; // сколько картинок надо загрузить
+if (!ct.res.sndtotal) ct.res.sndtotal = 3; // сколько звуков надо загрузить
+ct.res.graphurls = ['ct.jump.png']; // массив урлов изображений, которых надо загрузить
+ct.res.imgs = {}; // массив уже загруженных атласов
+
+ct.res.fetchimg = function (url,callback) { // фетч изображений
+  img = document.createElement('img');
+  img.src = url;
+  img.onload = function () {
+    ct.res.imgs[url] = this;
+    ct.res.graphloaded ++;
+    if (callback) // в случае, если изображение загружается во время самой игры, логично будет указать собственный обработчик этого изображения
+      callback('ok');
+    else {
+      if (ct.res.graphloaded == ct.res.graphtotal) {
+        ct.res.parseimages(); // когда всё готово, обрабатываем полученные изображения
+      }
+    } 
+  };
+  img.onerror = img.onabort = function () { 
+    // в случае ошибки заменим незагруженое изображение на картинку-пустышку, чтобы игра не порушилась, и выведем уведомление в консоль
+    ct.res.imgs[url] = this;
+    ct.res.graphloaded ++;
+    if (callback)
+      callback('error');
+    else {
+      console.log('Изображение с url ' + this.src + ' не удалось загрузить :( Возможно, обновление страницы решит эту проблему.')
+      if (ct.res.graphloaded == ct.res.graphtotal) {
+        ct.res.parseimages();
+      }
+    };
+    this.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQIW2NkAAIAAAoAAggA9GkAAAAASUVORK5CYII=";
+  }
+};
+ct.res.makesprite = function (name,img,x,y,w,h,xo,yo,cols,rows,untill) { // ф-ия для разбивки атласа на кучу спрайтиков
+// пример: ct.res.makesprite('tileset','http://my.site/tileset.png',0,0,64,128,16,16,2,4,8); - последние три параметра можно опустить
+  var o = {};
+  var i = ct.res.imgs[img];
+  o.atlas = i;
+  o.frames = [];
+  o.x = xo;
+  o.y = yo;
+  if (cols) {
+    o.width = w / cols;
+    o.height = h / rows;
+    for (yy = 0; yy < rows; yy++) {
+      for (xx = 0; xx < cols; xx ++) {
+        o.frames.push([x + xx * o.width,y + yy * o.height]);
+        if (yy * cols + xx >= untill) break;
+      }
+      if (yy * cols + xx >= untill) break;
+    }
+  } else {
+    o.width = w;
+    o.height = h;
+    o.frames = [[x,y]];
+  };
+  ct.graphs[name] = o;
+};
+for (i in ct.res.graphurls) {
+  ct.res.fetchimg(ct.res.graphurls[i]); // начинаем обработку всех необходимых изображений
+};
+/********************* обработка *******************/
+ct.res.parseimages = function (img,x,y,xx,yy,cols,rows,untill) { // здесь указываем, что где валяется в атласе
+  /* */
+};
+
+ct.libs += ' res';
