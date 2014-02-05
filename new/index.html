@@ -1,0 +1,63 @@
+<!DOCTYPE>
+<html>
+  <head>
+    <title>Ct.js</title>
+    <script src="main.js"></script>
+    <script src="draw.js"></script>
+    <script src="types.js"></script>
+  </head>
+  <body>
+    <canvas id="ct"></canvas>
+    <script>
+      c = document.getElementById('ct');
+      
+c.addEventListener('ctbeforeready', function (e) {
+console.log(this,e);
+});
+c.addEventListener('ctloading', function (e) {
+console.log(this,e);
+this.x.clearRect(0, 0, this.width, this.height);
+this.x.strokeStyle = '#ffffff';
+this.x.globalAlpha = 1;
+this.x.font = '16px verdana, sans-serif';
+this.x.fillStyle = '#ffffff';
+this.x.shadowBlur = 8;
+this.x.shadowColor = 'rgba(0,0,0,1)';
+this.x.shadowOffsetX = 0;
+this.x.shadowOffsetY = 0;
+this.x.lineWidth = 3;
+this.x.textBaseline = 'middle';
+this.x.textAlign = 'center';
+this.x.beginPath();
+this.pi += 0.15;
+this.x.arc(this.width / 2,this.height / 2,64,this.pi,0.5*Math.PI + this.pi);
+this.x.stroke();
+this.x.fillText('Грузимся!',this.width / 2,this.height / 2 - 15);
+this.x.font = '28px verdana, sans-serif';
+//this.x.fillText(Math.floor((this.res.graphloaded + this.res.sndloaded) / (this.res.graphtotal + this.res.sndtotal) * 100) + '%',this.width / 2,this.height / 2 + 15);
+},false);
+
+
+      c.ct(false,{
+        /*graphics: {
+          kill: {
+            loaded: false,
+            src: 'killdabitch'
+          }
+        },*/
+        rooms: {
+          teehee: {
+            events: function () {
+            
+            },
+            onstart: function () {
+            
+            }
+          },
+          starting: 'teehee'
+        }
+      },'draw types');
+
+    </script>
+  </body>
+</html>
