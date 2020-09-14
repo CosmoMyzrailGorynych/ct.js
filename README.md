@@ -1,4 +1,10 @@
-﻿О котэ
+# This repo is now archived
+
+It is left as a reminder of where it all began, and just in case I need some proofs that ct.js is more than 7 years old.
+
+The new ct.js is at https://github.com/ct-js/ct-js, with the official website at https://ctjs.rocks/. It is a cool 2D game engine and IDE, go try it.
+
+О котэ
 =====
 ct (читается как «котэ») – модульная библиотека для гибкой разработки любых html5 приложений посредством Javascript. Несмотря на то, что вместе с ct (далее - котэ) можно писать любые приложения, основным направлением в разработке стали браузерные игры, поэтому давайте называть любое приложение на котэ игрой. В данной библиотеке все данные об игре хранятся в самом canvas элементе – так можно парой мелких поправок в коде разместить на одной странице несколько инстанций ct, или же создавать/выгружать их динамически. Таким образом, вся игра заключается в канвасе, который публикуется под переменной ct: 
 ~~~
